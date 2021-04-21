@@ -18,9 +18,9 @@ public class CreditCardJavaSerializationSerde implements Serde {
     private Schema schema = SchemaBuilder.builder()
             .record("credit_card")
             .fields()
-            .requiredString("name")
-            .requiredString("cardNumber")
-            .requiredString("cardType")
+            .requiredString("number")
+            .requiredString("customerFirstName")
+            .requiredString("customerLastName")
             .requiredString("country")
             .requiredString("currency")
             .requiredBoolean("blocked")
@@ -32,12 +32,12 @@ public class CreditCardJavaSerializationSerde implements Serde {
         return new Serializer() {
             @Override
             public byte[] serialize(GenericRecord record) throws IOException {
-                String name = (String) record.get("name");
-                String cardNumber = (String) record.get("cardNumber");
-                CardType type = CardType.valueOf((String) record.get("cardType"));
+                String name = (String) record.get("number");
+                String cardNumber = (String) record.get("customerFirstName");
+                CardType type = CardType.valueOf((String) record.get("customerLastName"));
                 String country = (String) record.get("country");
-                Boolean blocked = (boolean) record.get("blocked");
                 String currency = (String) record.get("currency");
+                Boolean blocked = (boolean) record.get("blocked");
 
                 CreditCard creditCard = new CreditCard(name, country, currency, cardNumber, blocked, type);
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -75,9 +75,9 @@ public class CreditCardJavaSerializationSerde implements Serde {
                 inputStream.close();
 
                 GenericRecord record = new GenericData.Record(schema);
-                record.put("name", card.getName());
-                record.put("cardNumber", card.getCardNumber());
-                record.put("cardType", card.getType().name());
+                record.put("number", card.getName());
+                record.put("customerFirstName", card.getCardNumber());
+                record.put("customerLastName", card.getType().name());
                 record.put("country", card.getCountry());
                 record.put("currency", card.getCurrency());
                 record.put("blocked", card.getBlocked());

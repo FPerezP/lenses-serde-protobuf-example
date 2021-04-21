@@ -32,12 +32,12 @@ public class CreditCardProtobufSerde implements Serde {
             @Override
             public byte[] serialize(GenericRecord record) throws IOException {
                 CardData.CreditCard card = CardData.CreditCard.newBuilder()
-                        .setName((String) record.get("name"))
-                        .setCardNumber((String) record.get("cardNumber"))
-                        .setType((String) record.get("cardType"))
+                        .setName((String) record.get("number"))
+                        .setCardNumber((String) record.get("customerFirstName"))
+                        .setType((String) record.get("customerLastName"))
                         .setCountry((String) record.get("country"))
-                        .setBlocked((boolean) record.get("blocked"))
                         .setCurrency((String) record.get("currency"))
+                        .setBlocked((boolean) record.get("blocked"))
                         .build();
                 return card.toByteArray();
             }
@@ -57,12 +57,12 @@ public class CreditCardProtobufSerde implements Serde {
                 CardData.CreditCard card = CardData.CreditCard.parseFrom(bytes);
 
                 GenericRecord record = new GenericData.Record(schema);
-                record.put("name", card.getName());
-                record.put("cardNumber", card.getCardNumber());
-                record.put("cardType", card.getType());
+                record.put("number", card.getName());
+                record.put("customerFirstName", card.getCardNumber());
+                record.put("customerLastName", card.getType());
                 record.put("country", card.getCountry());
-                record.put("currency", card.getCurrency());
                 record.put("blocked", card.getBlocked());
+                record.put("currency", card.getCurrency());
                 return record;
             }
 
